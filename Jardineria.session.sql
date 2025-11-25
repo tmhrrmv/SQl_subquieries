@@ -37,22 +37,34 @@ FROM cliente c;
 
 --Enunciado: Listar los productos (mostrando código, nombre y gama) junto con el cálculo del margen de ganancia (diferencia entre precio_venta y precio_proveedor).
 -- Incluir solo aquellos productos con un margen mayor a 50.
-
+     
 SELECT  
     p.codigo_producto AS "Codigo del producto",
-    p.nombre AS "Nombre "
-    p.gama
-    
-
-
-
-
-
-
-
-
+    p.nombre AS "Nombre",
+    p.gama,
+    (p.precio_venta - p.precio_proveedor) AS margen_ganancia
+FROM producto p
+WHERE (p.precio_venta - p.precio_proveedor) > 50;
 
 
     
+--Consulta 4 – Pedidos entregados tarde:Enunciado: Mostrar la lista de pedidos que se entregaron con retraso (donde fecha_entrega es mayor que fecha_esperada), incluyendo el número de días de retraso y el nombre del cliente que realizó el pedido. Se debe usar un CTE.
+WITH pedidos_retrasados AS (
+    SELECT 
+        p.codigo_pedido,
+        p.fecha_entrega,
+        p.fecha_esperada,
+        p.codigo_cliente,
+        DATEDIFF(p.fecha_entrega, p.fecha_esperada) AS dias_retraso
+    FROM pedido p
+    WHERE p.fecha_entrega > p.fecha_esperada
+)
+SELECT 
+    pr.codigo_pedido,
+    pr.fecha_entrega,
+    pr.fecha_esperada,
+    pr.dias_retraso,
+    (SELECT nombre_cliente FROM cliente c WHERE c.codigo_cliente = pr.codigo_cliente) AS nombre_cliente
+FROM pedidos_retrasados pr;
 
 
