@@ -68,3 +68,28 @@ SELECT
 FROM pedidos_retrasados pr;
 
 
+--Consulta 5 – Empleados por oficina: Enunciado: Listar cada oficina (mostrando su código y ciudad) junto con el total de empleados que trabajan en ella. Se debe utilizar un CTE.
+
+WITH empleados_por_oficina AS (
+    SELECT
+        e.codigo_oficina,
+        COUNT(e.codigo_empleado) AS total_empleados
+    FROM empleado e
+    WHERE e.codigo_oficina IS NOT NULL
+    GROUP BY e.codigo_oficina 
+)
+SELECT
+    o.codigo_oficina,
+    o.ciudad,                                   
+    (SELECT
+        epo.total_empleados
+     FROM empleados_por_oficina epo
+     WHERE epo.codigo_oficina = o.codigo_oficina) AS total_empleados
+FROM oficina o;
+
+--Consulta 6 – Jefes y número de subordinados:Enunciado: Obtener la lista de empleados que actúan como jefes (tienen empleados a su cargo) junto con el número de subordinados que tienen y la ciudad de su oficina. Se debe usar un JOIN y un CTE.
+
+
+
+
+
